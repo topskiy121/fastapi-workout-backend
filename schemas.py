@@ -1,8 +1,8 @@
 from pydantic import BaseModel
-class UserCreate(BaseModel):
-    name:str
-    age:int
-class UserResponse(BaseModel):
+class SWorkoutAdd(BaseModel):
+    title:str
+    description:str | None = None
+class SWorkout(BaseModel):
     id:int
     name:str
     age:int

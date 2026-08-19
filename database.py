@@ -1,15 +1,15 @@
-import aiosqlite
-DB_PATH="workout.db"
-async def init_db():
-    async with aiosqlite.connect(DB_PATH) as conn:
-        async with conn.cursor() as cursor:
-            await cursor.execute(
-                """
-            CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                age INTEGER NOT NULL
-            );
-            """
-            )
-            await conn.commit()
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from sqlalchemy.orm import DeclarativeBase
+
+DATABASE_URL="sqlite+aiosqlite:///./workout.db"
+
+engine=create_async_engine(DATABASE_URL)
+
+new_session=async_sessionmaker(engine, expire_on_commit=False)
+
+class Model(DeclarativeBase):
+    pass
+
+async def create_tables():
+    async with engine.begin() as conn:
+        await conn.run_sync(Model.metadata.create_all)

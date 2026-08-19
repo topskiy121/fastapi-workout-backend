@@ -17,4 +17,4 @@
 ## Как запустить локально
 1. Клонировать репозиторий:
    ```bash
-   git clone [https://github.com/topskiy121/fastapi-crud-backend.git](https://github.com/topskiy121/fastapi-crud-backend.git)
+    git clone https://github.com/topskiy121/fastapi-crud-backend.git
