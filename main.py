@@ -19,3 +19,11 @@ async def add_workout(workout: SWorkoutAdd):
 async def get_workouts():
     workouts=await WorkoutRepository.get_workouts()
     return workouts
+@app.delete("/workouts/{workout_id}")
+async def delete_workout_by_id(workout_id: int):
+    workout_id = await WorkoutRepository.delete_workout_by_id(workout_id)
+    return {"status": "deleted"}
+@app.get("/workouts/{workout_id}")
+async def get_workouts_by_id(workout_id: int):
+    workout = await WorkoutRepository.get_workouts_by_id(workout_id)
+    return workout

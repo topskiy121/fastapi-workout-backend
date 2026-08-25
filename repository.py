@@ -1,7 +1,7 @@
 from database import new_session
 from models import WorkoutTable
 from schemas import SWorkoutAdd
-from sqlalchemy import select
+from sqlalchemy import select, delete
 
 class WorkoutRepository:
     @classmethod
@@ -20,3 +20,16 @@ class WorkoutRepository:
             result=await session.execute(query)
             workouts=result.scalars().all()
             return workouts
+    @classmethod
+    async def delete_workout_by_id(cls, workout_id: int):
+        async with new_session() as session:
+            query = delete(WorkoutTable).where(WorkoutTable.id == workout_id)
+            await session.execute(query)
+            await session.commit()
+    @classmethod
+    async def get_workouts_by_id(cls, workout_id: int):
+        async with new_session() as session:
+            query = select(WorkoutTable).where(WorkoutTable.id == workout_id)
+            result = await session.execute(query)
+            workout = result().scalar_one_or_none()
+            return workout
