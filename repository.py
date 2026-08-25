@@ -31,5 +31,5 @@ class WorkoutRepository:
         async with new_session() as session:
             query = select(WorkoutTable).where(WorkoutTable.id == workout_id)
             result = await session.execute(query)
-            workout = result().scalar_one_or_none()
+            workout = result.scalar_one_or_none()
             return workout

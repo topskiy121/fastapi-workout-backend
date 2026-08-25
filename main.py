@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 from database import create_tables
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, status
 from schemas import SWorkoutAdd
 from repository import WorkoutRepository
 
@@ -26,4 +26,6 @@ async def delete_workout_by_id(workout_id: int):
 @app.get("/workouts/{workout_id}")
 async def get_workouts_by_id(workout_id: int):
     workout = await WorkoutRepository.get_workouts_by_id(workout_id)
+    if workout is None:
+        raise HTTPException(status_code=404, detail="Workout not found")
     return workout
