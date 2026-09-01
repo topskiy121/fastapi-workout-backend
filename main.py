@@ -21,7 +21,9 @@ async def get_workouts():
     return workouts
 @app.delete("/workouts/{workout_id}")
 async def delete_workout_by_id(workout_id: int):
-    workout_id = await WorkoutRepository.delete_workout_by_id(workout_id)
+    deleted_count = await WorkoutRepository.delete_workout_by_id(workout_id)
+    if deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Workout not found")
     return {"status": "deleted"}
 @app.get("/workouts/{workout_id}")
 async def get_workouts_by_id(workout_id: int):
@@ -29,3 +31,9 @@ async def get_workouts_by_id(workout_id: int):
     if workout is None:
         raise HTTPException(status_code=404, detail="Workout not found")
     return workout
+@app.put("/workouts/{workout_id}")
+async def update_workout_by_id(workout_id: int, workout: SWorkoutAdd):
+    updated_count = await WorkoutRepository.update_workout_by_id(workout_id, workout)
+    if updated_count == 0:
+        raise HTTPException(status_code=404, detail="Workout not found")
+    return{"status": "update"}

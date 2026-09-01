@@ -6,4 +6,4 @@ class WorkoutTable(Model):
 
     id: Mapped[int]=mapped_column(primary_key=True)
     title: Mapped[str] 
-    description:Mapped[str] = Mapped[str|None]
+    description: Mapped[str | None]

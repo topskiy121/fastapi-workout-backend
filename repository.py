@@ -1,7 +1,7 @@
 from database import new_session
 from models import WorkoutTable
 from schemas import SWorkoutAdd
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, update
 
 class WorkoutRepository:
     @classmethod
@@ -24,8 +24,9 @@ class WorkoutRepository:
     async def delete_workout_by_id(cls, workout_id: int):
         async with new_session() as session:
             query = delete(WorkoutTable).where(WorkoutTable.id == workout_id)
-            await session.execute(query)
+            result = await session.execute(query)
             await session.commit()
+            return result.rowcount
     @classmethod
     async def get_workouts_by_id(cls, workout_id: int):
         async with new_session() as session:
@@ -33,3 +34,14 @@ class WorkoutRepository:
             result = await session.execute(query)
             workout = result.scalar_one_or_none()
             return workout
+    @classmethod
+    async def update_workout_by_id(cls, workout_id: int, data: SWorkoutAdd):
+        async with new_session() as session:
+            query = (
+                update(WorkoutTable)
+                .where(WorkoutTable.id == workout_id)
+                .values(**data.model_dump())
+                )
+            result = await session.execute(query)
+            await session.commit()
+            return result.rowcount

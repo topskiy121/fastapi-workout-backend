@@ -1,8 +1,8 @@
 from pydantic import BaseModel
+
 class SWorkoutAdd(BaseModel):
-    title:str
-    description:str | None = None
-class SWorkout(BaseModel):
-    id:int
-    name:str
-    age:int
+    title: str
+    description: str | None = None
+
+class SWorkout(SWorkoutAdd):
+    id: int
