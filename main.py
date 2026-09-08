@@ -11,7 +11,7 @@ async def lifespan(app: FastAPI):
 
 app=FastAPI(lifespan=lifespan)
 
-@app.post("/workouts")
+@app.post("/workouts", status_code=status.HTTP_201_CREATED)
 async def add_workout(workout: SWorkoutAdd):
     workout_id = await WorkoutRepository.add_workout(workout)
     return {"ok": True, "workout_id": workout_id}
@@ -23,17 +23,26 @@ async def get_workouts():
 async def delete_workout_by_id(workout_id: int):
     deleted_count = await WorkoutRepository.delete_workout_by_id(workout_id)
     if deleted_count == 0:
-        raise HTTPException(status_code=404, detail="Workout not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail="Workout not found"
+        )
     return {"status": "deleted"}
 @app.get("/workouts/{workout_id}")
 async def get_workouts_by_id(workout_id: int):
     workout = await WorkoutRepository.get_workouts_by_id(workout_id)
     if workout is None:
-        raise HTTPException(status_code=404, detail="Workout not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail="Workout not found"
+            )
     return workout
 @app.put("/workouts/{workout_id}")
 async def update_workout_by_id(workout_id: int, workout: SWorkoutAdd):
     updated_count = await WorkoutRepository.update_workout_by_id(workout_id, workout)
     if updated_count == 0:
-        raise HTTPException(status_code=404, detail="Workout not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail="Workout not found"
+        )
     return{"status": "update"}
