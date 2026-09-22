@@ -5,7 +5,6 @@ from router import router as workouts_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await create_tables()
     yield
 
 app=FastAPI(lifespan=lifespan)
