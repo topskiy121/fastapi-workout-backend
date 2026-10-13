@@ -1,20 +1,16 @@
-# FastAPI Async CRUD API
+# 🏋️ Workout Tracker Backend
 
-Асинхронное REST API приложение на FastAPI с использованием SQLite (`aiosqlite`) и Pydantic для валидации данных.
+Современный асинхронный RESTful API бэкенд для приложения отслеживания тренировок, разработанный на FastAPI.
 
-## Стек технологий
-* **Python 3.11+**
-* **FastAPI** — веб-фреймворк
-* **aiosqlite** — асинхронная работа с базой данных SQLite
-* **Pydantic** — валидация данных и схемы
-* **Uvicorn** — ASGI-сервер
+## 🛠 Технологии и стек
+* **Язык:** Python 3.12
+* **Фреймворк:** FastAPI
+* **База данных:** PostgreSQL, SQLAlchemy 2.0 (Async)
+* **Миграции:** Alembic
+* **Безопасность:** PyJWT (Access tokens), Argon2 (`pwdlib`) для хеширования паролей
+* **Контейнеризация:** Docker & Docker Compose
 
-## Структура проекта
-* `main.py` — маршруты (endpoints) и точка входа FastAPI
-* `schemas.py` — Pydantic-схемы для запросов и ответов
-* `database.py` — подключение к БД и инициализация таблиц
-
-## Как запустить локально
-1. Клонировать репозиторий:
-   ```bash
-    git clone https://github.com/topskiy121/fastapi-crud-backend.git
+## 🚀 Основной функционал
+- 🔐 **Аутентификация и авторизация:** Регистрация пользователей и безопасный вход с выдачей JWT-токенов (`/auth/register`, `/auth/login`).
+- 🗄 **Асинхронная работа с БД:** Полностью асинхронные запросы к PostgreSQL через SQLAlchemy 2.0.
+- 🔄 **Управление миграциями:** Контроль схемы базы данных с помощью Alembic.
