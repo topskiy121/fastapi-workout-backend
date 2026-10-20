@@ -8,6 +8,7 @@ class WorkoutRepository:
     async def add_workout(cls, data: SWorkoutAdd) -> int:
         async with new_session() as session:
             workout_dict=data.model_dump()
+            workout_dict["user_id"]=user_id
             workout = WorkoutTable(**workout_dict)
             session.add(workout)
             await session.flush()

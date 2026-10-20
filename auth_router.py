@@ -1,5 +1,6 @@
 from sqlalchemy import select
-from fastapi import APIRouter, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import APIRouter, HTTPException, status, Depends
 from schemas import SUserRegister, SUserAuth
 from models import UserTable
 from auth import get_password_hash, create_access_token, verify_password
@@ -26,18 +27,17 @@ async def register_user(user_data: SUserRegister):
     return{"message": "Пользователь успешно зарегистрирован!"}
 
 @router.post("/login")
-async def login_user(user_data: SUserAuth):
+async def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
     async with new_session() as session:
         query=(
             select(UserTable)
-            .where(UserTable.email==user_data.email)
+            # OAuth2 форма всегда передает логин в поле username, даже если мы вводим туда email
+            .where(UserTable.email == form_data.username) 
         )
         result=await session.execute(query)
         user=result.scalar_one_or_none()
 
-
-
-    if not user or not verify_password(user_data.password, user.hashed_password):
+    if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail="Неверный email или пароль"

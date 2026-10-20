@@ -1,4 +1,6 @@
-from fastapi import APIRouter, HTTPException, status
+from auth import get_current_user
+from models import UserTable
+from fastapi import APIRouter, HTTPException, status, Depends
 from schemas import SWorkoutAdd
 from repository import WorkoutRepository
 
@@ -8,8 +10,8 @@ router = APIRouter(
 )
 
 @router.post("", status_code=status.HTTP_201_CREATED)
-async def add_workout(workout: SWorkoutAdd):
-    workout_id = await WorkoutRepository.add_workout(workout)
+async def add_workout(workout: SWorkoutAdd, current_user: UserTable=Depends(get_current_user)):
+    workout_id = await WorkoutRepository.add_workout(workout, current_user.id)
     return {"ok": True, "workout_id": workout_id}
 
 @router.get("")

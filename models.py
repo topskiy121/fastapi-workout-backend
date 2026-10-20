@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Mapped, mapped_column
 from database import Model
+from sqlalchemy import ForeignKey
 
 class WorkoutTable(Model):
     __tablename__="workouts"
@@ -7,6 +8,7 @@ class WorkoutTable(Model):
     id: Mapped[int]=mapped_column(primary_key=True)
     title: Mapped[str] 
     description: Mapped[str | None] = mapped_column(default=None)
+    user_id: Mapped[int]=mapped_column(ForeignKey("users.id")) #привязка к таблице
 
 class UserTable(Model):
     __tablename__="users"
