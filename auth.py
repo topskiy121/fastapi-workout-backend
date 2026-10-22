@@ -6,7 +6,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from pwdlib import PasswordHash
 from datetime import datetime, timedelta, timezone
-import jwt, jwt.PyJWTError
+import jwt
 # Инициализируем хэшер паролей с алгоритмом bcrypt
 password_hash=PasswordHash.recommended()
 

@@ -30,21 +30,50 @@ async def get_workouts_by_id(workout_id: int):
     return workout
 
 @router.put("/{workout_id}")
-async def update_workout_by_id(workout_id: int, workout: SWorkoutAdd):
-    updated_count = await WorkoutRepository.update_workout_by_id(workout_id, workout)
-    if updated_count == 0:
+async def update_workout_by_id(
+    workout_id: int,
+    workout_data: SWorkoutAdd,
+    current_user: UserTable= Depends(get_current_user)
+):
+    workout=await WorkoutRepository.get_workouts_by_id(workout_id)
+
+    
+    if workout is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, 
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="Workout not found"
         )
+
+    if workout.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, 
+            detail="You dont have permission to edit this workout"
+        )
+    
+    updated_count = await WorkoutRepository.update_workout_by_id(workout_id, workout_data)
     return {"status": "update"}
 
 @router.delete("/{workout_id}")
-async def delete_workout_by_id(workout_id: int):
-    deleted_count = await WorkoutRepository.delete_workout_by_id(workout_id)
-    if deleted_count == 0:
+async def delete_workout_by_id(
+    workout_id: int,
+    current_user: UserTable=Depends(get_current_user)
+):
+    
+    workout=await WorkoutRepository.get_workouts_by_id(workout_id)
+    
+    #deleted_count = await WorkoutRepository.delete_workout_by_id(workout_id)
+    
+    if workout is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, 
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="Workout not found"
         )
+
+    if workout.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, 
+            detail="You dont have permission to delete this workout"
+        )
+    
+    await WorkoutRepository.delete_workout_by_id(workout_id)
     return {"status": "deleted"}
