@@ -15,8 +15,10 @@ async def add_workout(workout: SWorkoutAdd, current_user: UserTable=Depends(get_
     return {"ok": True, "workout_id": workout_id}
 
 @router.get("")
-async def get_workouts():
-    workouts = await WorkoutRepository.get_workouts()
+async def get_workouts(
+    current_user: UserTable = Depends(get_current_user)
+):
+    workouts = await WorkoutRepository.get_workouts(current_user.id)
     return workouts
 
 @router.get("/{workout_id}")
