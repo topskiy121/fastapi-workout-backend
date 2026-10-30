@@ -39,7 +39,15 @@ async def add_process_time_header(request: Request, call_next):
     response=await call_next(request) # Передаем запрос дальше в роут
 
     process_time=time.time() - start_time # считаем сколько прошло
-    print(f"⏱ Запрос {request.url.path} выполнен за {process_time:.4f} сек.")
+    
+    client_ip=request.client.host if request.client else "unknown"
+    
+    print(
+        f"[{request.method}] {request.url.path} | "
+        f"IP: {client_ip} | "
+        f"Status: {response.status_code} | "
+        f"Time: {process_time:.4f}s"
+    )
 
     # добавляем время в заголовки ответа
     response.headers["X-Process-Time"] = str(process_time)

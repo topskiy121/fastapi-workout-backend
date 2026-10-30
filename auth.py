@@ -10,7 +10,7 @@ import jwt
 # Инициализируем хэшер паролей с алгоритмом bcrypt
 password_hash=PasswordHash.recommended()
 
-SECRET_KEY="my_super_secret_key123" # Ключ известный только серверу
+SECRET_KEY="my_super_secret_key123_very_long_and_secure_key_32bytes" # Ключ известный только серверу
 ALGORITHM="HS256"
 
 OAuth2_PasswordBearer_schema=OAuth2PasswordBearer(tokenUrl="/auth/login")

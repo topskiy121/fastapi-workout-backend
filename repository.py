@@ -17,7 +17,7 @@ class WorkoutRepository:
     @classmethod
     async def get_workouts(cls, user_id: int):
         async with new_session() as session:
-            query=select(WorkoutTable).where(WorkoutTable.id == user_id)
+            query=select(WorkoutTable).where(WorkoutTable.user_id == user_id)
             result=await session.execute(query)
             workouts=result.scalars().all()
             return workouts
