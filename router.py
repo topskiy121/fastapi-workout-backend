@@ -18,12 +18,14 @@ async def add_workout(workout: SWorkoutAdd, current_user: UserTable=Depends(get_
 async def get_workouts(
     current_user: UserTable = Depends(get_current_user),
     limit: int = 10,
-    offset: int = 0
+    offset: int = 0,
+    title: str | None=None
 ):
     workouts = await WorkoutRepository.get_workouts(
         user_id=current_user.id,
         limit=limit,
-        offset=offset
+        offset=offset,
+        title=title
     )
     return workouts
 
