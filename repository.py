@@ -19,7 +19,7 @@ class WorkoutRepository:
         async with new_session() as session:
             query=select(WorkoutTable).where(WorkoutTable.user_id == user_id)
             if title is not None:
-                query = query.where(WorkoutTable.title == title)
+                query = query.where(WorkoutTable.title.ilike(f"%{title}%"))
             query=query.limit(limit).offset(offset)
             result=await session.execute(query)
             workouts=result.scalars().all()
