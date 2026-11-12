@@ -1,7 +1,7 @@
 from database import new_session
 from models import WorkoutTable
 from schemas import SWorkoutAdd
-from sqlalchemy import select, delete, update
+from sqlalchemy import select, delete, update, or_
 
 class WorkoutRepository:
     @classmethod
@@ -15,11 +15,13 @@ class WorkoutRepository:
             await session.commit()
             return workout.id
     @classmethod
-    async def get_workouts(cls, user_id: int, limit: int, offset: int, title: str | None=None):
+    async def get_workouts(cls, user_id: int, limit: int, offset: int, title: str | None=None, search: str | None=None):
         async with new_session() as session:
             query=select(WorkoutTable).where(WorkoutTable.user_id == user_id)
             if title is not None:
                 query = query.where(WorkoutTable.title.ilike(f"%{title}%"))
+            if search is not None:
+                query = query.where(or_(WorkoutTable.title.ilike(f"%{search}%"), WorkoutTable.description.ilike(f"%{search}%")))
             query=query.limit(limit).offset(offset)
             result=await session.execute(query)
             workouts=result.scalars().all()

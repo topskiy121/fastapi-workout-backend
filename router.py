@@ -19,13 +19,15 @@ async def get_workouts(
     current_user: UserTable = Depends(get_current_user),
     limit: int = 10,
     offset: int = 0,
-    title: str | None=None
+    title: str | None=None,
+    search: str |None=None
 ):
     workouts = await WorkoutRepository.get_workouts(
         user_id=current_user.id,
         limit=limit,
         offset=offset,
-        title=title
+        title=title,
+        search=search
     )
     return workouts
 
